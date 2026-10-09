@@ -81,6 +81,11 @@ button {
   outline-offset: 3px;
 }
 
+/* the hidden attribute must win over classes like .btn { display: inline-block } */
+[hidden] {
+  display: none !important;
+}
+
 /* ---------- 3. Common ---------- */
 .container {
   width: 100%;
@@ -187,6 +192,14 @@ button {
 }
 
 /* Phones: 5 languages + burger don't fit next to the full name, so only the logo stays */
+/* Small logo in header and footer */
+.logo {
+  height: 45px;
+  max-height: 45px;
+  width: auto;
+  object-fit: contain;
+}
+
 .header__brand span {
   display: none;
 }
@@ -350,14 +363,18 @@ button {
   margin-top: 32px;
 }
 
+/* Phone: the logo sits in normal flow under the text (no absolute positioning),
+   so it can never cover the title or buttons */
 .hero__logo {
   align-self: center;
-  width: min(70vw, 300px);
+  width: min(80vw, 340px);
 }
 
 .hero__logo img {
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px var(--gold), 0 20px 60px rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.6));
 }
 
 /* ---------- 6. About ---------- */
@@ -763,6 +780,13 @@ button {
   margin: 20px 0 32px;
 }
 
+/* Telegram + Instagram buttons; wrap under each other on narrow phones */
+.register__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .register__note {
   max-width: 55ch;
   margin-bottom: 32px;
@@ -790,6 +814,263 @@ button {
   font-size: 0.875rem;
 }
 
+/* ---------- 13. Application modal ---------- */
+/* <dialog> gives Esc-to-close, focus trapping and a ::backdrop for free */
+.modal {
+  --modal-bg: #141414;
+  --accent: #e50914;
+  --accent-gold: #d4af37;
+
+  width: min(100% - 32px, 520px);
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--modal-bg);
+  color: var(--white);
+}
+
+.modal[open] {
+  animation: modal-in 0.25s ease-out;
+}
+
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(16px); }
+}
+
+/* page behind the modal does not scroll */
+body:has(.modal[open]) {
+  overflow: hidden;
+}
+
+/* fills the whole dialog, so a click that reaches <dialog> itself = click on the backdrop */
+.modal__inner {
+  position: relative;
+  padding: 40px 20px 28px;
+}
+
+.modal__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--grey);
+  transition: color 0.2s;
+}
+
+.modal__close:hover {
+  color: var(--white);
+}
+
+.modal__title {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+  padding-right: 40px;
+}
+
+.modal__lead {
+  color: var(--grey);
+  margin: 12px 0 28px;
+}
+
+/* fields */
+.form-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  border: none;
+}
+
+.field > label,
+.field > legend {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+}
+
+.field input[type="text"] {
+  width: 100%;
+  padding: 13px 14px;
+  font: inherit;
+  color: var(--white);
+  background: #0b0b0b;
+  border: 1px solid var(--line);
+  transition: border-color 0.2s;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--accent-gold);
+}
+
+.field__error {
+  min-height: 1em;
+  color: #ff5a5f;
+  font-size: 0.8rem;
+}
+
+.field--error input {
+  border-color: var(--accent);
+}
+
+/* role: radio buttons styled as three equal tiles */
+.choices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.choice {
+  position: relative;
+}
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice span {
+  display: block;
+  padding: 12px 6px;
+  text-align: center;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.choice:hover span {
+  border-color: var(--white);
+}
+
+.choice input:checked + span {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.choice input:focus-visible + span {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.field--error .choice span {
+  border-color: rgba(229, 9, 20, 0.6);
+}
+
+/* Telegram channel link — phone: text on top, handle below; from 600px one row */
+.tg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 24px;
+  padding: 14px 16px;
+  border: 1px solid var(--accent-gold);
+  transition: background-color 0.2s;
+}
+
+.tg:hover {
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.tg__text {
+  font-size: 0.875rem;
+  color: var(--text-soft);
+}
+
+.tg__handle {
+  flex-shrink: 0;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+/* hidden for people, visible for spam bots (honeypot) */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.form__submit {
+  width: 100%;
+  margin-top: 24px;
+  cursor: pointer;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.form__submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.form__error {
+  margin-top: 12px;
+  color: #ff5a5f;
+}
+
+.form__error:empty {
+  display: none;
+}
+
+/* success screen */
+.success {
+  text-align: center;
+  padding: 16px 0 0;
+}
+
+.success__icon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  border: 2px solid var(--accent-gold);
+  border-radius: 50%;
+  color: var(--accent-gold);
+  font-size: 2rem;
+}
+
+.success .modal__title {
+  padding-right: 0;
+}
+
+.success__text {
+  color: var(--text-soft);
+  max-width: 40ch;
+  margin: 12px auto 0;
+}
+
+/* main action = go to Telegram, close is secondary */
+.success__actions {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.success__actions .form__submit {
+  margin-top: 0;
+}
+
 /* ==========================================================
    Tablets — from 600px
    ========================================================== */
@@ -805,6 +1086,17 @@ button {
 
   .process__list {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .modal__inner {
+    padding: 48px 40px 36px;
+  }
+
+  .tg {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
   }
 
   .noms__item {
@@ -843,7 +1135,7 @@ button {
   }
 
   .hero__logo {
-    width: 380px;
+    width: 420px;
     flex-shrink: 0;
   }
 

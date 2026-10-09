@@ -12,8 +12,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="../css/style.css">
-  <script src="../js/main.js" defer></script>
+  <link rel="stylesheet" href="../css/style.css?v=3">
+  <script src="../js/main.js?v=3" defer></script>
 </head>
 <body>
 
@@ -21,7 +21,7 @@
   <header class="header">
     <div class="container header__inner">
       <a href="#top" class="header__brand">
-        <img src="../images/logo.png" alt="" width="44" height="44">
+        <img class="logo" src="../images/logo.png" alt="" width="65" height="45">
         <span>Beauty Dynastya</span>
       </a>
 
@@ -46,7 +46,7 @@
           <li><a href="#speakers">Спикеры</a></li>
           <li><a href="#participants">Участники</a></li>
           <li><a href="#partners">Партнёры</a></li>
-          <li><a href="#register" class="btn btn--small">Участвовать</a></li>
+          <li><a href="#register" class="btn btn--small" data-open-apply>Участвовать</a></li>
         </ul>
       </nav>
     </div>
@@ -63,13 +63,13 @@
           <p class="hero__dates"><time>01.09</time> — <time>01.02</time></p>
           <p class="hero__noms">Маникюр, ресницы, PMU, SMP, брови, волосы</p>
           <div class="hero__actions">
-            <a href="#register" class="btn">Участвовать</a>
+            <a href="#register" class="btn" data-open-apply>Участвовать</a>
             <a href="#judges" class="btn btn--ghost">Судьи чемпионата</a>
           </div>
         </div>
 
         <div class="hero__logo">
-          <img src="../images/logo.png" alt="Логотип Beauty Dynastya" width="464" height="464">
+          <img src="../images/logo.png" alt="Логотип Beauty Dynastya" width="900" height="623">
         </div>
       </div>
     </section>
@@ -833,14 +833,13 @@
       <div class="container register__inner">
         <h2 class="register__title">Участвуйте</h2>
         <p class="register__text">
-          Регистрация и подробности — в директе нашего Instagram.
-          Напишите нам, укажите номинацию, и мы пришлём правила
-          и расскажем, как отправить работу.
+          Регистрация и все подробности — в нашей Telegram-группе. Вступайте, укажите номинацию, и мы пришлём правила и расскажем, как отправить работу.
         </p>
         <p class="register__note">Победители получают кубок, сертификат и официальную VIP-карту.</p>
-        <a href="https://ig.me/m/beauty_dynastya" class="btn btn--light" target="_blank" rel="noopener">
-          Написать в Instagram
-        </a>
+        <div class="register__actions">
+          <a href="https://t.me/Beautydynastya" class="btn btn--light" target="_blank" rel="noopener">Перейти в Telegram</a>
+          <a href="https://ig.me/m/beauty_dynastya" class="btn btn--ghost" target="_blank" rel="noopener">Написать в Instagram</a>
+        </div>
       </div>
     </section>
 
@@ -850,7 +849,7 @@
   <footer class="footer">
     <div class="container footer__inner">
       <a href="#top" class="header__brand">
-        <img src="../images/logo.png" alt="" width="40" height="40">
+        <img class="logo" src="../images/logo.png" alt="" width="65" height="45">
         <span>Beauty Dynastya</span>
       </a>
       <a href="https://www.instagram.com/beauty_dynastya/" class="footer__link" target="_blank" rel="noopener">
@@ -859,6 +858,67 @@
       <p class="footer__copy">© <span id="year">2026</span> Beauty Dynastya</p>
     </div>
   </footer>
+
+
+
+
+  <!-- ===== APPLICATION MODAL ===== -->
+  <dialog class="modal" id="apply" aria-labelledby="apply-title">
+    <div class="modal__inner">
+      <button class="modal__close" type="button" data-close aria-label="Закрыть">&times;</button>
+
+      <form class="apply-form" novalidate>
+        <h2 class="modal__title" id="apply-title">Стать частью чемпионата</h2>
+        <p class="modal__lead">Оставьте данные, и мы свяжемся с вами.</p>
+
+        <input type="hidden" name="language" value="ru">
+        <!-- honeypot: real people never see or tick it, bots do — Web3Forms then rejects the message -->
+        <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="form-grid">
+          <div class="field" data-field>
+            <label for="ap-name">Имя и фамилия</label>
+            <input id="ap-name" name="full_name" type="text" placeholder="Анна Иванова" required autocomplete="name" aria-describedby="err-name">
+            <p class="field__error" id="err-name" aria-live="polite"></p>
+          </div>
+
+          <div class="field" data-field>
+            <label for="ap-country">Страна</label>
+            <input id="ap-country" name="country" type="text" placeholder="Казахстан" required autocomplete="country-name" aria-describedby="err-country">
+            <p class="field__error" id="err-country" aria-live="polite"></p>
+          </div>
+
+          <fieldset class="field" data-field>
+            <legend>Хочу участвовать как</legend>
+            <div class="choices">
+            <label class="choice"><input type="radio" name="role" value="Judge" required><span>Судья</span></label>
+            <label class="choice"><input type="radio" name="role" value="Participant" required><span>Участник</span></label>
+            <label class="choice"><input type="radio" name="role" value="Speaker" required><span>Спикер</span></label>
+            </div>
+            <p class="field__error" aria-live="polite"></p>
+          </fieldset>
+        </div>
+
+        <button class="btn form__submit" type="submit">Отправить заявку</button>
+        <p class="form__error" role="alert"></p>
+
+        <a class="tg" href="https://t.me/Beautydynastya" target="_blank" rel="noopener">
+          <span class="tg__text">Новости, правила и итоги в нашей Telegram-группе</span>
+          <span class="tg__handle">@Beautydynastya</span>
+        </a>
+      </form>
+
+      <div class="success" hidden>
+        <div class="success__icon" aria-hidden="true">&#10003;</div>
+        <h3 class="modal__title" tabindex="-1">Спасибо! Ваша заявка принята</h3>
+        <p class="success__text">Остался последний шаг: перейдите в нашу Telegram-группу. Там правила, сроки и дальнейшие инструкции.</p>
+        <div class="success__actions">
+          <a class="btn form__submit" href="https://t.me/Beautydynastya" target="_blank" rel="noopener">Перейти в Telegram</a>
+          <button class="btn btn--ghost" type="button" data-close>Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
 
 </body>
 </html>
